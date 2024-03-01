@@ -3,7 +3,7 @@ package ru.netology
 import kotlin.math.round
 
 fun main() {
-    var transferResult = transfer(transferAmount = 145_555_00, cardType = "Mastercard")
+    var transferResult = transfer("Mastercard", transferAmount = 75_000_00)
     println(transferResult)
 }
 
@@ -14,7 +14,7 @@ fun transfer(cardType: String = "Мир", thisMonthTransferredAmount: Int = 0, t
     if (transferAmount + thisMonthTransferredAmount > monthLimit)
         return "Превышен месячный лимит перевода, перевод заблокирован"
     val mastercardMonthLimit = 75_000_00
-    val mastercardMonthTransferredAmount = 0
+    val mastercardMonthTransferredAmount = 15_000_00
     val mastercardExtraFeePercent = 0.006
     val mastercardExtraFeeConst = 20_00
     val visaFee = 0.0075
@@ -26,7 +26,8 @@ fun transfer(cardType: String = "Мир", thisMonthTransferredAmount: Int = 0, t
     when (cardType) {
         "Mastercard" -> feeResult =
             if (transferAmount + mastercardMonthTransferredAmount > mastercardMonthLimit)
-                ((transferAmount - mastercardMonthLimit) * mastercardExtraFeePercent + mastercardExtraFeeConst)
+                ((transferAmount - mastercardMonthLimit + mastercardMonthTransferredAmount) * mastercardExtraFeePercent
+                        + mastercardExtraFeeConst)
             else 0.0
 
         "Visa" -> feeResult =
