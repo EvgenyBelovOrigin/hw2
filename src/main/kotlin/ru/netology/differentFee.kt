@@ -25,10 +25,16 @@ fun transfer(cardType: String = "Мир", thisMonthTransferredAmount: Int = 0, t
 
     when (cardType) {
         "Mastercard" -> feeResult =
-            if (transferAmount + mastercardMonthTransferredAmount > mastercardMonthLimit)
-                ((transferAmount - mastercardMonthLimit + mastercardMonthTransferredAmount) * mastercardExtraFeePercent
-                        + mastercardExtraFeeConst)
-            else 0.0
+            when {
+                mastercardMonthTransferredAmount > mastercardMonthLimit ->
+                    transferAmount * mastercardExtraFeePercent + mastercardExtraFeeConst
+
+                transferAmount + mastercardMonthTransferredAmount > mastercardMonthLimit ->
+                    (transferAmount + mastercardMonthTransferredAmount - mastercardMonthLimit) *
+                            mastercardExtraFeePercent + mastercardExtraFeeConst
+
+                else -> 0.0
+            }
 
         "Visa" -> feeResult =
             if (transferAmount * visaFee > visaMinFee)
